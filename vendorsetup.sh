@@ -52,6 +52,7 @@ export OF_DEFAULT_KEYMASTER_VERSION=4.1
 
 # Dont install AROMAFM
 export FOX_DELETE_AROMAFM=1
+export FOX_REMOVE_AAPT=1
 
 # Add some extras
 export FOX_USE_ZIP_BINARY=1
