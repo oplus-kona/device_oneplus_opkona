@@ -212,4 +212,6 @@ optimize_io_and_cpu() {
 
 optimize_io_and_cpu
 
+/sbin/prune_historic_logs.sh 10
+
 exit 0
