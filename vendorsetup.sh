@@ -37,6 +37,8 @@ export OF_USE_LEGACY_BATTERY_SERVICES=1
 
 # Run a process after formatting data to work-around MTP issues
 export OF_RUN_POST_FORMAT_PROCESS=1
+export OF_BIND_MOUNT_SDCARD_ON_FORMAT=1
+export OF_UNMOUNT_SDCARDS_BEFORE_REBOOT=1
 
 # OTA for custom ROMs
 export OF_SUPPORT_ALL_PAYLOAD_OTA_UPDATES=1
