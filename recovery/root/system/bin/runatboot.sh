@@ -162,4 +162,54 @@ case $project11 in
      ;;
 esac
 
+optimize_io_and_cpu() {
+    echo "I:Applying I/O optimizations to block devices..." >> /tmp/recovery.log
+
+    # Optimize all physical UFS partitions (sda, sdb, sdc, sdd, sde, sdf)
+    for disk in /sys/block/sd*; do
+        if [ -d "$disk/queue" ]; then
+            dev=$(basename "$disk")
+            # 1. Direct I/O dispatch
+            if grep -q "none" "$disk/queue/scheduler" 2>/dev/null; then
+                echo none > "$disk/queue/scheduler" 2>/dev/null
+            fi
+
+            # 2. Increase read-ahead buffer to 2048 KB
+            echo 2048 > "$disk/queue/read_ahead_kb" 2>/dev/null
+
+            # 3. Increase block request backlog depth
+            echo 512 > "$disk/queue/nr_requests" 2>/dev/null
+
+            # 4. Disable I/O accounting statistics to reduce CPU kernel overhead
+            echo 0 > "$disk/queue/iostats" 2>/dev/null
+
+            # 5. Disable rotational delay penalty
+            echo 0 > "$disk/queue/rotational" 2>/dev/null
+
+            # 6. Disable add_random overhead
+            echo 0 > "$disk/queue/add_random" 2>/dev/null
+
+            echo "I:Optimized physical device: $dev" >> /tmp/recovery.log
+        fi
+    done
+
+    # Optimize dynamic partition mapper and loop devices (dm-*, loop*)
+    for dev in /sys/block/dm-* /sys/block/loop*; do
+        if [ -d "$dev/queue" ]; then
+            echo 2048 > "$dev/queue/read_ahead_kb" 2>/dev/null
+            echo 512 > "$dev/queue/nr_requests" 2>/dev/null
+            echo 0 > "$dev/queue/iostats" 2>/dev/null
+        fi
+    done
+
+    echo "I:Setting CPU scaling governors..." >> /tmp/recovery.log
+    for gov in /sys/devices/system/cpu/cpufreq/policy*/scaling_governor; do
+        echo performance > "$gov" 2>/dev/null || echo schedutil > "$gov" 2>/dev/null || echo walt > "$gov" 2>/dev/null
+    done
+
+    echo "I:I/O and CPU optimization complete." >> /tmp/recovery.log
+}
+
+optimize_io_and_cpu
+
 exit 0
