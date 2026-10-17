@@ -5,7 +5,8 @@ on init
     mkdir /config
     mount configfs none /config
     mkdir /config/usb_gadget/g1 0770 shell shell
-    write /config/usb_gadget/g1/bcdUSB 0x0200
+    write /config/usb_gadget/g1/bcdUSB 0x0310
+    write /config/usb_gadget/g1/bcdDevice 0x0404
     write /sys/class/android_usb/android0/idVendor 0x18d1
     write /sys/class/android_usb/android0/idProduct 0xd001
     write /config/usb_gadget/g1/idVendor 0x18d1
@@ -45,10 +46,28 @@ on property:init.svc.adbd=stopped
 on property:sys.usb.config=adb && property:sys.usb.configfs=1
     start adbd
 
+on property:sys.usb.config=sideload && property:sys.usb.configfs=1
+    start adbd
+
+on property:sys.usb.config=sideload,adb && property:sys.usb.configfs=1
+    start adbd
+
 on property:sys.usb.config=mtp,adb && property:sys.usb.configfs=1
     start adbd
 
 on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=sideload && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=sideload,adb && property:sys.usb.configfs=1
     write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
     symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
     write /config/usb_gadget/g1/UDC ${sys.usb.controller}

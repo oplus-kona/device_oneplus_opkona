@@ -6,7 +6,15 @@ LOGMSG() {
     echo "I:$@" >> /tmp/recovery.log
 }
 
+UI_PRINT() {
+    echo "ui_print [High-Speed Flash] $*" >> /tmp/recovery.log
+    echo "ui_print [High-Speed Flash] $*" > /proc/self/fd/2 2>/dev/null || true
+    echo "ui_print [High-Speed Flash] $*" > /proc/self/fd/1 2>/dev/null || true
+}
+
 LOGMSG "---$SCRIPT_NAME start---"
+date +%s > /tmp/flash_start_time 2>/dev/null
+UI_PRINT "Starting..."
 
 LOGMSG "Resetting SPL date to prevent anti-rollback protection..."
 resetprop ro.build.version.security_patch 2023-12-31
@@ -41,6 +49,15 @@ else
         fi
     else
         LOGMSG "Recovery partition not found; skipping backup..."
+    fi
+fi
+
+# Automatic High-Speed Sideload staging
+if [ "$1" != "--no-recurse" ] && [ -f /sideload/package.zip ]; then
+    LOGMSG "Detected active ADB sideload package (/sideload/package.zip)..."
+    if [ -x /system/bin/highspeed_sideload.sh ]; then
+        /system/bin/highspeed_sideload.sh --stage-fuse
+        exit $?
     fi
 fi
 
