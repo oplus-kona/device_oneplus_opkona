@@ -1,16 +1,17 @@
 export TARGET_ARCH="arm64-v8a"
 
-# Some about us
-export OF_MAINTAINER=Wishmasterflo
+# Maintainer
+export OF_MAINTAINER="zenzer0s"
 
 # Build environment stuffs
 export FOX_BUILD_DEVICE="OnePlus8T"
 export ALLOW_MISSING_DEPENDENCIES=true
 export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+export OF_FORCE_PREBUILT_KERNEL=1
 export TARGET_DEVICE_ALT="kebab, Kebab, instantnoodle, instantnoodlep, lemonades, lemonkebab, OnePlus8, OnePlus 8, OnePlus8T, OnePlus 8T, OnePlus8Pro, OnePlus9R"
 export FOX_TARGET_DEVICES="kebab, Kebab, instantnoodle, instantnoodlep, lemonades, lemonkebab, OnePlus8, OnePlus 8, OnePlus8T, OnePlus 8T, OnePlus8Pro, OnePlus9R"
-export BUILD_USERNAME="nobody"
-export BUILD_HOSTNAME="android-build"
+export BUILD_USERNAME="zenzer0s"
+export BUILD_HOSTNAME="zenzer0s-build"
 
 # Use magisk boot for patching
 export OF_USE_MAGISKBOOT=1
