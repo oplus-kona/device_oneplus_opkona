@@ -139,7 +139,7 @@ case "$1" in
             fuse_size="$(wc -c < /sideload/package.zip 2>/dev/null)"
             determine_staging "${fuse_size:-0}"
             UI_PRINT "Copying to stage..."
-            cp /sideload/package.zip "$STAGE_TARGET"
+            dd if=/sideload/package.zip of="$STAGE_TARGET" bs=4M status=none
             run_highspeed_flash "$STAGE_TARGET" "$overall_start"
             exit $?
         else
