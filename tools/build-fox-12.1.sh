@@ -36,8 +36,8 @@ done
 cd "$FOX"
 export LC_ALL=C
 export OUT_DIR="$OUT"
-export USE_RBE=0
-for v in $(env | grep -o '^RBE_[A-Za-z0-9_]*_EXEC_STRATEGY'); do export "$v=local"; done
+for v in $(env | grep -o '^RBE_[A-Za-z0-9_]*'); do unset "$v"; done
+export USE_RBE=false
 source build/envsetup.sh
 lunch ofox_opkona-eng
 mka adbd recoveryimage -j"$(nproc)"
