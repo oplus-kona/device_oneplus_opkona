@@ -1,0 +1,13 @@
+diff --git a/aidl_language.cpp b/aidl_language.cpp
+index 5bff95e5..20b44744 100644
+--- a/aidl_language.cpp
++++ b/aidl_language.cpp
+@@ -200,7 +200,7 @@ AidlAnnotation::AidlAnnotation(
+     : AidlNode(location, comments), schema_(schema), parameters_(std::move(parameters)) {}
+ 
+ struct ConstReferenceFinder : AidlVisitor {
+-  const AidlConstantReference* found;
++  const AidlConstantReference* found = nullptr;
+   void Visit(const AidlConstantReference& ref) override {
+     if (!found) found = &ref;
+   }

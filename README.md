@@ -36,3 +36,23 @@
 - **TWRP Team** & **OrangeFox Team**
 - **Wishmasterflo** – Previous device tree maintenance
 - **Qnorsten** – OOS fix
+
+---
+
+## Building (fox_12.1)
+
+```sh
+./orangefox_sync.sh --branch 12.1 --path /path/to/fox_12.1      # OrangeFox sync tools
+tools/build-fox-12.1.sh /path/to/fox_12.1 [/path/to/out_dir]
+```
+
+`tools/build-fox-12.1.sh` copies the tree into `device/oneplus/opkona`, applies
+`patches/fox_12.1/*.patch`, and builds `recoveryimage` with these fixes for
+problems hit on a fresh sync:
+
+| Problem | Fix |
+| :--- | :--- |
+| `TARGET_2ND_ARCH_VARIANT` `armv8-2a` is rejected by the 12.1 build system | `armv8-a` in `BoardConfig.mk` |
+| `aidl` / `aidl-cpp` segfault while checking `@Backing(type=...)` (uninitialised `found` in `ConstReferenceFinder`) | `patches/fox_12.1/system_tools_aidl-init-found.patch` |
+| Build ends at `sed: .../recovery/root/twres/splash.xml: No such file`; a recovery built that way shows a black screen | `OUT_DIR` outside the source tree (Soong needs an absolute `$(OUT)` to copy the theme) |
+| Link steps hang when a system-wide RBE profile points at a dead service | `USE_RBE=0` and all `RBE_*_EXEC_STRATEGY=local` |
