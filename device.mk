@@ -131,3 +131,9 @@ PRODUCT_COPY_FILES += \
     device/oneplus/opkona/prebuilt/systemmanifest.xml:$(TARGET_COPY_OUT_RECOVERY)/root/system/manifest.xml \
     device/oneplus/opkona/prebuilt/vendormanifest.xml:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/manifest.xml \
 	
+
+# Keymint wrapper and health service (Android 16 base)
+PRODUCT_PACKAGES += \
+    android.hardware.security.keymint-service.wrapper \
+    android.hardware.health-service.qti \
+    android.hardware.health-service.qti_recovery

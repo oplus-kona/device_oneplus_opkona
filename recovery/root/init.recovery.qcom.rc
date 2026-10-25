@@ -43,6 +43,8 @@ service make-fake-partitions-service /system/bin/make-fake-partitions-service.sh
 
 
 on init
+    start servicemanager
+    start hwservicemanager
     write /sys/class/backlight/panel0-backlight/brightness 200
     start boot-hal-1-1
     setprop sys.usb.config adb
