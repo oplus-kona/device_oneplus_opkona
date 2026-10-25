@@ -54,5 +54,5 @@ problems hit on a fresh sync:
 | :--- | :--- |
 | `TARGET_2ND_ARCH_VARIANT` `armv8-2a` is rejected by the 12.1 build system | `armv8-a` in `BoardConfig.mk` |
 | `aidl` / `aidl-cpp` segfault while checking `@Backing(type=...)` (uninitialised `found` in `ConstReferenceFinder`) | `patches/fox_12.1/system_tools_aidl-init-found.patch` |
-| Build ends at `sed: .../recovery/root/twres/splash.xml: No such file`; a recovery built that way shows a black screen | `OUT_DIR` outside the source tree (Soong needs an absolute `$(OUT)` to copy the theme) |
+| Build ends at `sed: .../recovery/root/twres/splash.xml: No such file`; a recovery built that way shows a black screen | `patches/fox_12.1/bootable_recovery-fix-theme-copy-abs-path.patch` (ensures `twRes` always resolves to an absolute path) |
 | Link steps hang when a system-wide RBE profile points at a dead service | `USE_RBE=0` and all `RBE_*_EXEC_STRATEGY=local` |
